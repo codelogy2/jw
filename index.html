@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090c12"><meta name="description" content="فرایند تولید در صنعت طلا و جواهر؛ از متالورژی و ریخته‌گری تا فینیشینگ و کنترل کیفیت">
+  <title>فرایند تولید در صنعت طلا و جواهر</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/slides.css">
+  <link rel="stylesheet" href="css/deck.css">
+  <link rel="stylesheet" href="css/refinements.css">
+  <link rel="stylesheet" href="css/industrial.css">
+  <link rel="stylesheet" href="css/manufacturing.css">
+  <link rel="stylesheet" href="css/polish.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#/present" aria-label="شروع ارائه از ابتدا"><span class="brand-mark">Au</span><span>فرایند تولید در صنعت طلا و جواهر <small dir="ltr">Gold &amp; Jewellery Manufacturing</small></span></a>
+    <nav class="mode-nav" aria-label="حالت نمایش"><a href="#/present" data-mode="present">ارائه</a><a href="#/read" data-mode="read">مطالعه</a><a href="#/guide" data-mode="guide">راهنما</a></nav>
+    <div class="top-meta"><span class="live-dot"></span><span>ارائهٔ علمی · ۴۷ دقیقه</span><button class="icon-button" id="fullscreen" title="تمام‌صفحه" aria-label="تمام‌صفحه">⛶</button></div>
+  </header>
+  <main id="app" tabindex="-1"></main>
+  <footer class="hud"><div class="progress-track"><i id="progress"></i></div><div class="hud-row"><span id="slide-label">۰۱ / ۳۲</span><div class="hud-controls"><button id="prev" aria-label="اسلاید قبلی">→</button><button id="next" aria-label="اسلاید بعدی">←</button><button id="speaker-notes" aria-label="یادداشت سخنران">یادداشت</button><button id="print-deck" aria-label="چاپ یا ذخیره به صورت PDF">PDF</button><span class="key-hint">← → حرکت · Home آغاز · P یادداشت · Esc خروج</span></div><span class="hud-code">GOLD <b>•</b> JEWELLERY</span></div></footer>
+  <dialog id="notes-dialog" class="notes-dialog"><form method="dialog"><button class="notes-close" aria-label="بستن یادداشت‌ها">×</button></form><div class="eyebrow">PRESENTER NOTES <span id="notes-index"></span></div><h2 id="notes-title"></h2><div id="notes-body"></div></dialog>
+  <dialog id="access-dialog" class="notes-dialog access-dialog"><form id="access-form"><div class="eyebrow">PRESENTER ACCESS</div><h2>ورود به یادداشت‌های سخنران</h2><label>نام کاربری<input id="access-username" name="username" autocomplete="username" required></label><label>رمز عبور<input id="access-password" name="password" type="password" autocomplete="current-password" required></label><p id="access-error" role="status"></p><button type="submit" class="print-button">ورود</button><button type="button" class="print-button" id="access-cancel">بازگشت</button></form></dialog>
+  <script type="module" src="js/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نقشه زنده فرایند تولید جواهر</title>
+<style>
+:root{--bg:#0a101b;--panel:#111c2b;--panel2:#142338;--line:#29415a;--gold:#d8b56d;--cyan:#63d9e7;--green:#8ce0b2;--text:#eef4fa;--muted:#9aadc0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -20%,#1c3450 0,#0a101b 55%);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+.wrap{max-width:1200px;margin:auto;padding:28px 18px 40px}.head{text-align:center;margin-bottom:24px}.eyebrow{color:var(--gold);font-size:12px;letter-spacing:2px}.head h1{font-size:clamp(22px,4vw,34px);margin:9px 0}.head p{color:var(--muted);margin:0;font-size:14px}
+.toolbar{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:20px 0}.toolbar button{border:1px solid #38506b;background:#142338;color:var(--text);padding:9px 14px;border-radius:999px;font-size:12px;cursor:pointer}.toolbar button.active{border-color:var(--gold);color:var(--gold);box-shadow:0 0 18px #d8b56d22}
+.legend{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin:14px 0 24px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px;background:var(--cyan);box-shadow:0 0 9px currentColor}
+.flow{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:34px 22px;direction:rtl}
+.node{position:relative;min-height:112px;padding:16px 15px;border:1px solid #2d455f;border-radius:15px;background:linear-gradient(145deg,#17283d,#101a29);box-shadow:0 10px 25px #0003;transition:.35s;z-index:2}
+.node:after{content:"";position:absolute;inset:0;border-radius:15px;background:linear-gradient(120deg,transparent,#ffffff08,transparent);pointer-events:none}
+.node .num{font-size:10px;color:var(--gold);letter-spacing:1px}.node h3{font-size:14px;margin:7px 0 5px}.node p{font-size:11px;line-height:1.8;color:var(--muted);margin:0}
+.node .state{position:absolute;left:13px;top:13px;width:7px;height:7px;border-radius:50%;background:#53677b}
+.node.active{border-color:var(--cyan);box-shadow:0 0 0 1px #63d9e755,0 0 28px #63d9e72b,0 10px 25px #0005;transform:translateY(-3px)}
+.node.active .state{background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse 1s infinite}
+.node.done{border-color:#497b69}.node.done .state{background:var(--green);box-shadow:0 0 10px var(--green)}
+@keyframes pulse{50%{opacity:.3;transform:scale(.7)}}
+.node.wide{grid-column:span 2}
+.connector{position:absolute;z-index:1;pointer-events:none;overflow:visible}
+.connector path{fill:none;stroke:#29445e;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.connector .moving{stroke:var(--gold);stroke-width:3;stroke-dasharray:7 13;animation:dash 1.1s linear infinite;filter:drop-shadow(0 0 4px #d8b56d)}
+@keyframes dash{to{stroke-dashoffset:-40}}
+.branch{margin-top:30px;border:1px solid #263d55;background:#0d1826;border-radius:18px;padding:18px}.branch h2{font-size:14px;color:var(--gold);margin:0 0 13px}.branchgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.mini{border:1px solid #29415a;background:#142338;border-radius:12px;padding:12px}.mini b{display:block;font-size:12px;margin-bottom:5px}.mini span{font-size:10px;color:var(--muted);line-height:1.7}
+.status{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:18px;color:var(--muted);font-size:11px}.status strong{color:var(--cyan);font-weight:600}.progress{height:4px;background:#1d3045;border-radius:9px;overflow:hidden;margin-top:9px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold));box-shadow:0 0 12px var(--cyan);transition:width .4s}
+@media(max-width:760px){.flow{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.node{min-height:120px}.node.wide{grid-column:span 2}.branchgrid{grid-template-columns:1fr}.connector{display:none}.status{align-items:flex-start;flex-direction:column}}
+@media(max-width:430px){.wrap{padding:22px 12px}.flow{grid-template-columns:1fr}.node.wide{grid-column:span 1}.node{min-height:95px}}
+
+.feedback{margin-top:22px;border:1px solid #36516d;background:#0d1826;border-radius:18px;padding:18px}
+.feedback h2{font-size:15px;color:#e2c27f;margin:0 0 6px}
+.feedback-intro{font-size:11px;color:#a9bacb;line-height:1.8;margin:0 0 14px}
+.feedback-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.feedback-card{background:#132338;border:1px solid #304a65;border-radius:13px;padding:13px}
+.feedback-route{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+.feedback-step{font-size:11px;font-weight:700;border:1px solid #49637e;border-radius:8px;padding:8px 10px;background:#192e46}
+.feedback-step.decision{border-color:#d8b56d;color:#f0d99e}
+.feedback-arrow{color:#d8b56d;font-size:18px}
+.feedback-branches{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.return-path,.continue-path{border-radius:9px;padding:10px;background:#101c2b;border:1px solid #34516a;display:flex;flex-direction:column;gap:5px}
+.return-path{border-color:#a77e49}
+.return-path b{color:#e6bd79;font-size:11px}
+.continue-path b{color:#8ce0b2;font-size:11px}
+.return-path span,.continue-path span{font-size:10px;color:#a9bacb;line-height:1.7}
+.return-path strong,.continue-path strong{font-size:10px;color:#e8eef5}
+.return-path strong{color:#e6bd79}
+.feedback-note{font-size:10px;color:#a9bacb;line-height:1.8;margin-top:12px;border-top:1px solid #2b4158;padding-top:10px}
+@media(max-width:650px){.feedback-grid{grid-template-columns:1fr}}
+@media(max-width:430px){.feedback-branches{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+<div class="eyebrow">JEWELRY MANUFACTURING ECOSYSTEM</div>
+<h1>از ایده تا جواهر نهایی</h1>
+<p>نقشه زنده جریان طراحی، مهندسی، ساخت، اصلاح و تحویل محصول</p>
+</header>
+<div class="toolbar" aria-label="کنترل نمایش">
+<button class="active" data-mode="auto">اجرای خودکار</button>
+<button data-mode="pause">توقف</button>
+<button data-mode="restart">شروع دوباره</button>
+</div>
+<div class="legend"><span><i class="dot"></i>مرحله فعال</span><span><i class="dot" style="background:var(--green);color:var(--green)"></i>مرحله انجام‌شده</span><span>مسیر طلایی: حرکت فرایند</span></div>
+<main class="flow" id="flow">
+<article class="node" data-step="0"><i class="state"></i><div class="num">01 / CONCEPT</div><h3>ایده‌پردازی و طراحی</h3><p>تعریف ایده، نیاز محصول و طراحی اولیه</p></article>
+<article class="node" data-step="1"><i class="state"></i><div class="num">02 / ENGINEERING</div><h3>مهندسی محصول</h3><p>بررسی ساختار، امکان‌پذیری و مواد</p></article>
+<article class="node" data-step="2"><i class="state"></i><div class="num">03 / 3D DESIGN</div><h3>طراحی سه‌بعدی</h3><p>مدل‌سازی دقیق و آماده‌سازی فایل ساخت</p></article>
+<article class="node" data-step="3"><i class="state"></i><div class="num">04 / REVIEW</div><h3>بازبینی مهندسی</h3><p>کنترل مدل، اصلاح و تأیید نهایی</p></article>
+<article class="node" data-step="4"><i class="state"></i><div class="num">05 / PRODUCTION PLAN</div><h3>برنامه‌ریزی تولید</h3><p>انتخاب روش ساخت، مواد و توالی عملیات</p></article>
+<article class="node" data-step="5"><i class="state"></i><div class="num">06 / MANUFACTURING</div><h3>ساخت و تولید</h3><p>چاپ سه‌بعدی، ریخته‌گری، ماشین‌کاری و مونتاژ</p></article>
+<article class="node" data-step="6"><i class="state"></i><div class="num">07 / FINISHING</div><h3>پرداخت و تکمیل</h3><p>مخراج‌کاری، آبکاری، پرداخت و تمیزکاری</p></article>
+<article class="node" data-step="7"><i class="state"></i><div class="num">08 / QUALITY</div><h3>کنترل کیفیت</h3><p>بررسی ابعاد، عیار، سنگ‌ها و کیفیت نهایی</p></article>
+<article class="node" data-step="8"><i class="state"></i><div class="num">09 / PACKAGING</div><h3>بسته‌بندی و آماده‌سازی</h3><p>ثبت مشخصات، محافظت و بسته‌بندی محصول</p></article>
+<article class="node" data-step="9"><i class="state"></i><div class="num">10 / LOGISTICS</div><h3>انبار و لجستیک</h3><p>ثبت موجودی، رهگیری و آماده‌سازی ارسال</p></article>
+<article class="node wide" data-step="10"><i class="state"></i><div class="num">11 / DELIVERY</div><h3>ارسال و تحویل محصول</h3><p>خروج امن محموله و تحویل به مشتری یا نمایندگی</p></article>
+</main>
+
+<section class="feedback">
+  <h2>حلقه‌های بازخورد و اصلاح</h2>
+  <p class="feedback-intro">فرایند تولید خطی و یک‌طرفه نیست؛ در صورت مشاهده ایراد، محصول به مرحله مسئول اصلاح بازمی‌گردد.</p>
+  <div class="feedback-grid">
+    <div class="feedback-card">
+      <div class="feedback-route">
+        <span class="feedback-step">بازبینی مهندسی</span>
+        <span class="feedback-arrow">←</span>
+        <span class="feedback-step decision">نیازمند اصلاح؟</span>
+      </div>
+      <div class="feedback-branches">
+        <div class="return-path"><b>بله</b><span>بازگشت به طراحی سه‌بعدی برای اصلاح مدل، ابعاد یا ساختار</span><strong>↶ بازگشت به مرحله ۰۳</strong></div>
+        <div class="continue-path"><b>خیر</b><span>تأیید مهندسی و آزادسازی برای برنامه‌ریزی تولید</span><strong>→ ادامه به مرحله ۰۵</strong></div>
+      </div>
+    </div>
+    <div class="feedback-card">
+      <div class="feedback-route">
+        <span class="feedback-step">کنترل کیفیت</span>
+        <span class="feedback-arrow">←</span>
+        <span class="feedback-step decision">مردود؟</span>
+      </div>
+      <div class="feedback-branches">
+        <div class="return-path"><b>بله</b><span>ارجاع به بخش مسئول: تولید، پرداخت، مخراج‌کاری یا آبکاری</span><strong>↶ اصلاح و بازرسی مجدد</strong></div>
+        <div class="continue-path"><b>خیر</b><span>تأیید نهایی محصول و اجازه بسته‌بندی</span><strong>→ ادامه به مرحله ۰۹</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="feedback-note">پس از هر اصلاح، محصول دوباره از نقطه کنترل مربوط بررسی می‌شود؛ هیچ مرحله‌ای بدون تأیید لازم به مرحله بعد نمی‌رود.</div>
+</section>
+
+<section class="branch">
+<h2>سامانه‌های پشتیبان در تمام مسیر</h2>
+<div class="branchgrid">
+<div class="mini"><b>هوش مصنوعی و داده</b><span>تحلیل طراحی، بهینه‌سازی فرایند، پیش‌بینی خطا و پایش عملکرد</span></div>
+<div class="mini"><b>آزمایشگاه و علم مواد</b><span>آزمون فلزات و آلیاژها، گوهرشناسی، آنالیز و کالیبراسیون</span></div>
+<div class="mini"><b>کیفیت، ایمنی و پایداری</b><span>تضمین کیفیت، HSE، بازیافت مواد و مدیریت پسماند</span></div>
+</div>
+</section>
+<div class="status"><span id="statusText">در حال آماده‌سازی مسیر تولید…</span><strong id="counter">۰۱ / ۱۱</strong></div>
+<div class="progress"><i id="bar"></i></div>
+</div>
+<script>
+(()=>{
+ const nodes=[...document.querySelectorAll('[data-step]')],status=document.getElementById('statusText'),counter=document.getElementById('counter'),bar=document.getElementById('bar'),buttons=[...document.querySelectorAll('button[data-mode]')];
+ const names=['ایده‌پردازی و طراحی','مهندسی محصول','طراحی سه‌بعدی','بازبینی مهندسی','برنامه‌ریزی تولید','ساخت و تولید','پرداخت و تکمیل','کنترل کیفیت','بسته‌بندی و آماده‌سازی','انبار و لجستیک','ارسال و تحویل محصول'];
+ let index=0,timer=null,playing=true;
+ const fa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+ function paint(){nodes.forEach((n,i)=>{n.classList.toggle('active',i===index);n.classList.toggle('done',i<index)});status.textContent='مرحله فعال: '+names[index];counter.textContent=fa(index+1)+' / ۱۱';bar.style.width=((index+1)/11*100)+'%'}
+ function tick(){index=(index+1)%nodes.length;paint()}
+ function start(){clearInterval(timer);playing=true;timer=setInterval(tick,1900);buttons.forEach(b=>b.classList.toggle('active',b.dataset.mode==='auto'))}
+ function stop(){clearInterval(timer);playing=false;buttons.forEach(b=>b.classList.toggle('active',b.dataset.mode==='pause'))}
+ buttons.forEach(b=>b.addEventListener('click',()=>{if(b.dataset.mode==='auto')start();if(b.dataset.mode==='pause')stop();if(b.dataset.mode==='restart'){index=0;paint();start()}}));
+ nodes.forEach(n=>n.addEventListener('click',()=>{index=Number(n.dataset.step);paint();if(playing)start()}));
+ paint();start();
+})();
+</script>
+</body></html>
