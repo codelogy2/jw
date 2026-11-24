@@ -4,7 +4,7 @@ import { openingSlides, technicalSlides, bibliographySlides } from './technical-
 export const siteConfig = {
   title: 'فرایند تولید در صنعت طلا و جواهر',
   titleEn: 'Gold and Jewellery Manufacturing Processes',
-  publicUrl: 'https://www.google.com',
+  publicUrl: 'https://codelogy2.github.io/jw/#/read',
   durationMinutes: 47,
   instructor: 'استاد شیری',
   collectorDeveloper: 'مهدی پورذهبی',
